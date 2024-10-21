@@ -1,1 +1,8 @@
-# news_explorer_backend
+# NewsExplorer - Back end
+
+A project designed to showcase skills learned from TripleTen Software Engineering program.
+Created with Express and MongoDB
+
+Link to application:
+
+- https://aivaxela.github.io/news_explorer_frontend/
