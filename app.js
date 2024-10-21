@@ -13,3 +13,6 @@ app.use(express.urlencoded({extended: true}));
 app.use(cors());
 
 app.listen(PORT);
+
+app.use("/users", require("./routes/users"));
+
