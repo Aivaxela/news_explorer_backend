@@ -6,7 +6,15 @@ const User = require("../models/user");
 const { error } = require("console");
 
 module.exports.getCurrentUser = (req, res) => {
-  console.log("getting user");
+  req.user = { _id: "6716fc63e8415c6737d5ec49" };
+  User.findById(req.user._id)
+    .orFail(() => {
+      return Promise.reject(new Error("user not found"));
+    })
+    .then((user) => {
+      res.send({ data: user });
+    })
+    .catch((err) => console.error(err));
 };
 
 module.exports.signin = (req, res) => {
