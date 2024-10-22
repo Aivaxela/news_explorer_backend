@@ -27,4 +27,28 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+userSchema.statics.findUserByCredentials = function findUserByCredentials(
+  email,
+  password
+) {
+  if (!email || !password) {
+    return Promise.reject(new Error("missing field"));
+  }
+  return this.findOne({ email })
+    .select("+password")
+    .then((user) => {
+      if (!user) {
+        return Promise.reject(new Error("user not found"));
+      }
+
+      return bcrypt.compare(password, user.password).then((matched) => {
+        if (!matched) {
+          return Promise.reject(new Error("paswords don't match"));
+        }
+
+        return user;
+      });
+    });
+};
+
 module.exports = mongoose.model("user", userSchema);

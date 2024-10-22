@@ -9,7 +9,26 @@ module.exports.getCurrentUser = (req, res) => {
   console.log("getting user");
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.signin = (req, res) => {
+  const { email, password } = req.body;
+
+  User.findUserByCredentials(email.toLowerCase(), password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+        expiresIn: "7d",
+      });
+
+      const id = mongoose.Types.ObjectId(user._id).toString();
+      res.send({
+        token,
+        username: user.username,
+        id,
+      });
+    })
+    .catch((err) => console.error(err));
+};
+
+module.exports.signup = (req, res) => {
   const { email, password, name } = req.body;
 
   bcrypt
@@ -19,11 +38,11 @@ module.exports.createUser = (req, res) => {
         const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
           expiresIn: "7d",
         });
-      });
-      res.send({
-        token,
-        email: email,
-        name: name,
+        res.send({
+          token,
+          email: email,
+          name: name,
+        });
       });
     })
     .catch((err) => console.error(err));
