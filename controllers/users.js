@@ -6,7 +6,7 @@ const User = require("../models/user");
 const { error } = require("console");
 
 module.exports.getCurrentUser = (req, res) => {
-  req.user = { _id: "6716fc63e8415c6737d5ec49" };
+  req.user = { _id: "6716fc63e8415c6737d5eb49" };
   User.findById(req.user._id)
     .orFail(() => {
       return Promise.reject(new Error("user not found"));
