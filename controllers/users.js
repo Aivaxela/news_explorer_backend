@@ -37,19 +37,19 @@ module.exports.signin = (req, res) => {
 };
 
 module.exports.signup = (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, password, username } = req.body;
 
   bcrypt
     .hash(password, 10)
     .then((hash) => {
-      User.create({ email, password: hash, name }).then((user) => {
+      User.create({ email, password: hash, username }).then((user) => {
         const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
           expiresIn: "7d",
         });
         res.send({
           token,
           email: email,
-          name: name,
+          username: username,
         });
       });
     })
