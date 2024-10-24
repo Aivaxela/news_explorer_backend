@@ -46,3 +46,27 @@ module.exports.saveArticle = (req, res, next) => {
       .catch((err) => console.err(err));
   });
 };
+
+module.exports.deleteArticle = (req, res, next) => {
+  Article.findOne({ _id: req.params.id })
+    .populate("owner", {
+      _id: 1,
+      urlToImage: 1,
+      title: 1,
+      description: 1,
+      source: 1,
+      publishedAt: 1,
+      url: 1,
+      keyword: 1,
+    })
+    .then((article) => {
+      const articleOwner = mongoose.Types.ObjectId(article.owner).toString();
+
+      if (articleOwner === req.user._id) {
+        return Article.findByIdAndDelete({ _id: article._id }).then(
+          (returnArticle) => res.send({ data: returnArticle })
+        );
+      }
+    })
+    .catch((err) => console.error(err));
+};
