@@ -5,7 +5,6 @@ const articleSchema = new mongoose.Schema({
   urlToImage: {
     type: String,
     required: true,
-    unique: true,
     validate: {
       validator(value) {
         return validator.isURL(value);
@@ -32,7 +31,6 @@ const articleSchema = new mongoose.Schema({
   url: {
     type: String,
     required: true,
-    unique: true,
     validate: {
       validator(value) {
         return validator.isURL(value);

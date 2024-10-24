@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Article = require("../models/article");
 
 module.exports.getArticles = (req, res, next) => {
-  Article.find({})
+  Article.find({ owner: req.user._id })
     .populate("owner", {
       _id: 1,
       urlToImage: 1,
