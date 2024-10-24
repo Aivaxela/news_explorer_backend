@@ -16,6 +16,6 @@ module.exports.auth = (req, res, next) => {
     req.user = payload;
     return next();
   } catch (err) {
-    return Promise.reject(new Error("unauthorized"));
+    return Promise.reject(new Error("unauthorized 2"));
   }
 };
