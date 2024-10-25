@@ -4,10 +4,10 @@ const validator = require("validator");
 const articleSchema = new mongoose.Schema({
   urlToImage: {
     type: String,
-    required: true,
+    required: false,
     validate: {
       validator(value) {
-        return validator.isURL(value);
+        if (value) return validator.isURL(value);
       },
       message: "Invalid image URL",
     },
