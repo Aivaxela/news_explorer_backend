@@ -6,6 +6,7 @@ const helmet = require("helmet");
 const { limiter } = require("./middleware/limiter");
 const { errors } = require("celebrate");
 const { requestLogger, errorLogger } = require("./middleware/logger");
+const { errorHandler, errorSender } = require("./middleware/error-handler");
 
 mongoose.set("strictQuery", true);
 mongoose.connect("mongodb://127.0.0.1:27017/newsexplorer_db");
@@ -30,3 +31,4 @@ app.use("/", require("./routes/index"));
 
 app.use(errorLogger);
 app.use(errors());
+app.use(errorHandler, errorSender);
