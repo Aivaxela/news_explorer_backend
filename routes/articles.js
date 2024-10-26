@@ -5,9 +5,11 @@ const {
   saveArticle,
   deleteArticle,
 } = require("../controllers/articles");
+const { searchArticles } = require("../utils/newsApi");
 
-router.get("/", auth, getArticles);
-router.post("/", auth, saveArticle);
-router.delete("/:id", auth, deleteArticle);
+router.get("/search/:query", searchArticles);
+router.get("/me", auth, getArticles);
+router.post("/me", auth, saveArticle);
+router.delete("/me/:id", auth, deleteArticle);
 
 module.exports = router;
