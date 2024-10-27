@@ -3,7 +3,7 @@ const Article = require("../models/article");
 
 module.exports.getArticles = (req, res, next) => {
   Article.find({ owner: req.user._id })
-    .populate("owne", {
+    .populate("owner", {
       _id: 1,
       urlToImage: 1,
       title: 1,
@@ -43,7 +43,7 @@ module.exports.saveArticle = (req, res, next) => {
         keyword: 1,
       })
       .then((returnArticle) => res.send({ data: returnArticle }))
-      .catch((err) => console.err(err));
+      .catch(next);
   });
 };
 

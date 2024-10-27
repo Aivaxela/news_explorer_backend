@@ -1,7 +1,20 @@
+const DefaultError = require("../utils/errors");
+const {
+  castErrorMessage,
+  validationErrorMessage,
+  signinFailErrorMessage,
+  badTokenErrorMessage,
+  forbiddenErrorMessage,
+  userNotFoundMessage,
+  itemNotFoundMessage,
+  pageNotFoundMessage,
+  duplicateEmailErrorMessage,
+  defaultErrorMessage,
+  rateLimitReachedMessage,
+} = require("../utils/error-messages");
+
 module.exports.errorHandler = (err, req, res, next) => {
-  const newError = new Error("default error mesageasg");
-  newError.statusCode = 405;
-  throw new newError();
+  throw new DefaultError(defaultErrorMessage);
 };
 
 module.exports.errorSender = (err, req, res, next) => {
