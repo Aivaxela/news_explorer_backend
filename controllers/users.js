@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../utils/config");
 const User = require("../models/user");
 const NotFoundError = require("../errors/not-found");
 const { userNotFoundMessage } = require("../utils/error-messages");
@@ -22,7 +21,7 @@ module.exports.signin = (req, res, next) => {
 
   User.findUserByCredentials(email.toLowerCase(), password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
         expiresIn: "7d",
       });
 
@@ -44,7 +43,7 @@ module.exports.signup = (req, res, next) => {
     .then((hash) => {
       User.create({ email, password: hash, username })
         .then((user) => {
-          const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+          const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
             expiresIn: "7d",
           });
           res.send({

@@ -7,10 +7,9 @@ const { limiter } = require("./middleware/limiter");
 const { errors } = require("celebrate");
 const { requestLogger, errorLogger } = require("./middleware/logger");
 const { errorHandler, errorSender } = require("./middleware/error-handler");
-const { DB_ADDRESS, DB_PORT } = require("./utils/config");
 
 mongoose.set("strictQuery", true);
-mongoose.connect(DB_ADDRESS);
+mongoose.connect(process.env.DB_ADDRESS);
 
 const app = express();
 
@@ -29,4 +28,4 @@ app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler, errorSender);
 
-app.listen(DB_PORT);
+app.listen(process.env.DB_PORT);
