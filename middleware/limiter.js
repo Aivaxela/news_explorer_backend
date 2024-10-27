@@ -5,7 +5,7 @@ function handleLimitReached() {
 }
 
 module.exports.limiter = rateLimit({
-  windowMs: 1 * 60 * 1000, //1 minutes
+  windowMs: 1 * 60 * 1000,
   limit: 100,
   standardHeaders: "draft-7",
   legacyHeaders: false,

@@ -7,7 +7,7 @@ const articleSchema = new mongoose.Schema({
     unique: false,
     validate: {
       validator(value) {
-        if (value) return validator.isURL(value);
+        return value ? validator.isURL(value) : true;
       },
       message: "Invalid image URL",
     },

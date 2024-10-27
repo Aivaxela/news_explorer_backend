@@ -1,7 +1,9 @@
-const { getTodaysDate, getDateSevenDaysAgo } = require("../utils/getDates");
+const BadRequestError = require("../errors/bad-request");
+const { badRequestErrorMessage } = require("./error-messages");
+const { getTodaysDate, getDateSevenDaysAgo } = require("./getDates");
 
-module.exports.searchArticles = (req, res, next) => {
-  return fetch(
+module.exports.searchArticles = (req, res, next) =>
+  fetch(
     `https://nomoreparties.co/news/v2/everything?q=${
       req.params.query
     }&from=${getDateSevenDaysAgo()}&to=${getTodaysDate()}&pageSize=100
@@ -18,7 +20,7 @@ module.exports.searchArticles = (req, res, next) => {
       if (data.ok) {
         return data.json();
       }
+      return Promise.reject(new BadRequestError(badRequestErrorMessage));
     })
     .then((data) => res.send(data))
-    .catch((err) => console.error(err));
-};
+    .catch(next);

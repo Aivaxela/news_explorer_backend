@@ -3,8 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const helmet = require("helmet");
-const { limiter } = require("./middleware/limiter");
 const { errors } = require("celebrate");
+const { limiter } = require("./middleware/limiter");
 const { requestLogger, errorLogger } = require("./middleware/logger");
 const { errorHandler, errorSender } = require("./middleware/error-handler");
 

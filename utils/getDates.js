@@ -1,10 +1,9 @@
-module.exports.getTodaysDate = () => {
-  return new Date().toLocaleString("default", {
+module.exports.getTodaysDate = () =>
+  new Date().toLocaleString("default", {
     year: "numeric",
     month: "long",
     day: "numeric",
   });
-};
 
 module.exports.getDateSevenDaysAgo = () => {
   const currentDate = new Date();

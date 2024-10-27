@@ -1,9 +1,6 @@
-const DefaultError = require("../errors/default");
 const BadRequestError = require("../errors/bad-request");
 const DuplicateItemError = require("../errors/duplicate");
 const ForbiddenError = require("../errors/forbidden");
-const NotFoundError = require("../errors/not-found");
-const RateLimitExceededError = require("../errors/rate-limit-exceeded");
 const SignInFailError = require("../errors/signin-fail");
 const {
   castErrorMessage,
@@ -12,8 +9,6 @@ const {
   badTokenErrorMessage,
   forbiddenErrorMessage,
   duplicateEmailErrorMessage,
-  defaultErrorMessage,
-  rateLimitReachedMessage,
 } = require("../utils/error-messages");
 
 module.exports.errorHandler = (err, req, res, next) => {

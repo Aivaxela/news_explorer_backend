@@ -5,16 +5,11 @@ const User = require("../models/user");
 const NotFoundError = require("../errors/not-found");
 const { userNotFoundMessage } = require("../utils/error-messages");
 
-module.exports.getCurrentUser = (req, res, next) => {
+module.exports.getCurrentUser = (req, res, next) =>
   User.findById(req.user._id)
-    .orFail(() => {
-      return Promise.reject(new NotFoundError(userNotFoundMessage));
-    })
-    .then((user) => {
-      res.send({ email: user.email, username: user.username });
-    })
+    .orFail(() => Promise.reject(new NotFoundError(userNotFoundMessage)))
+    .then((user) => res.send({ email: user.email, username: user.username }))
     .catch(next);
-};
 
 module.exports.signin = (req, res, next) => {
   const { email, password } = req.body;
@@ -48,8 +43,8 @@ module.exports.signup = (req, res, next) => {
           });
           res.send({
             token,
-            email: email,
-            username: username,
+            email,
+            username,
           });
         })
         .catch(next);
