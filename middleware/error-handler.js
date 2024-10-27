@@ -17,8 +17,6 @@ const {
 } = require("../utils/error-messages");
 
 module.exports.errorHandler = (err, req, res, next) => {
-  console.error(err);
-
   if (err.code === 11000) {
     throw new DuplicateItemError(duplicateEmailErrorMessage);
   }
