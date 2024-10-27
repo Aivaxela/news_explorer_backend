@@ -1,5 +1,11 @@
 const mongoose = require("mongoose");
 const Article = require("../models/article");
+const ForbiddenError = require("../errors/forbidden");
+const NotFoundError = require("../errors/not-found");
+const {
+  forbiddenErrorMessage,
+  itemNotFoundMessage,
+} = require("../utils/error-messages");
 
 module.exports.getArticles = (req, res, next) => {
   Article.find({ owner: req.user._id })
@@ -49,6 +55,9 @@ module.exports.saveArticle = (req, res, next) => {
 
 module.exports.deleteArticle = (req, res, next) => {
   Article.findOne({ _id: req.params.id })
+    .orFail(() => {
+      next(new NotFoundError(itemNotFoundMessage));
+    })
     .populate("owner", {
       _id: 1,
       urlToImage: 1,
@@ -67,6 +76,8 @@ module.exports.deleteArticle = (req, res, next) => {
           (returnArticle) => res.send({ data: returnArticle })
         );
       }
+
+      return Promise.reject(new ForbiddenError(forbiddenErrorMessage));
     })
-    .catch((err) => console.error(err));
+    .catch(next);
 };

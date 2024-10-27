@@ -1,6 +1,6 @@
 module.exports = class DefaultError extends Error {
   constructor(message) {
     super(message);
-    this.statusCode = 501;
+    this.statusCode = 500;
   }
 };

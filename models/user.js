@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const SignInFailError = require("../errors/signin-fail");
+const NotFoundError = require("../errors/not-found");
+const {
+  signinFailErrorMessage,
+  userNotFoundMessage,
+} = require("../utils/error-messages");
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -38,12 +44,12 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(
     .select("+password")
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Error("user not found"));
+        return Promise.reject(new NotFoundError(userNotFoundMessage));
       }
 
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
-          return Promise.reject(new Error("paswords don't match"));
+          return Promise.reject(new SignInFailError(signinFailErrorMessage));
         }
 
         return user;

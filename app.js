@@ -21,10 +21,6 @@ app.use(helmet());
 app.use(limiter);
 app.use(requestLogger);
 
-app.listen(PORT, () =>
-  console.log(`Server is running at http://localhost:${PORT}/`)
-);
-
 app.use("/users", require("./routes/users"));
 app.use("/articles", require("./routes/articles"));
 app.use("/", require("./routes/index"));
@@ -32,3 +28,5 @@ app.use("/", require("./routes/index"));
 app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler, errorSender);
+
+app.listen(PORT);

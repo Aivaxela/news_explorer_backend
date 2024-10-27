@@ -5,7 +5,9 @@ module.exports.auth = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith("Bearer ")) {
-    return Promise.reject(new Error("unauthorized"));
+    const error = new Error();
+    error.name = "Unauthorized";
+    return next(error);
   }
 
   const token = authorization.replace("Bearer ", "");
@@ -16,6 +18,7 @@ module.exports.auth = (req, res, next) => {
     req.user = payload;
     return next();
   } catch (err) {
-    return Promise.reject(new Error("unauthorized 2"));
+    err.name = "Unauthorized";
+    return next(err);
   }
 };
