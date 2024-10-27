@@ -9,8 +9,8 @@ const { searchArticles } = require("../utils/newsApi");
 const { validateId, validateNewArticle } = require("../middleware/validation");
 
 router.get("/search/:query", searchArticles);
-router.get("/me", auth, getArticles);
-router.post("/me", auth, validateNewArticle, saveArticle);
-router.delete("/me/:id", auth, validateId, deleteArticle);
+router.get("/", auth, getArticles);
+router.post("/", auth, validateNewArticle, saveArticle);
+router.delete("/:id", auth, validateId, deleteArticle);
 
 module.exports = router;
