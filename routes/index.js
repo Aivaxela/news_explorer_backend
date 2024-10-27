@@ -7,8 +7,8 @@ const {
 const NotFoundError = require("../errors/not-found");
 const { pageNotFoundMessage } = require("../utils/error-messages");
 
-router.post("/signup", signup);
-router.post("/signin", signin);
+router.post("/signup", validateNewUser, signup);
+router.post("/signin", validateUserLogin, signin);
 
 router.use(() => {
   throw new NotFoundError(pageNotFoundMessage);
