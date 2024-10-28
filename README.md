@@ -5,4 +5,4 @@ Created with Express and MongoDB
 
 Link to application:
 
-- https://aivaxela.github.io/news_explorer_frontend/
+- https://yournewsexplorer.crabdance.com/
