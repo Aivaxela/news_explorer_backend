@@ -13,7 +13,7 @@ mongoose.connect(
   process.env.DB_ADDRESS || "mongodb://127.0.0.1:27017/newsexplorer_db"
 );
 
-console.log(process.env);
+console.log(process.env.NEWS_API_KEY);
 
 const app = express();
 
