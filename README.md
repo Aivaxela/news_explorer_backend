@@ -6,3 +6,6 @@ Created with Express and MongoDB
 Link to application:
 
 - https://yournewsexplorer.crabdance.com/
+
+Link to frontend repo:
+- https://github.com/Aivaxela/news_explorer_frontend
