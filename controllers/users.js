@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const NotFoundError = require("../errors/not-found");
 const { userNotFoundMessage } = require("../utils/error-messages");
+const jwtKey = process.env.JWT_SECRET || "jwt-secret";
 
 module.exports.getCurrentUser = (req, res, next) =>
   User.findById(req.user._id)
@@ -16,7 +17,7 @@ module.exports.signin = (req, res, next) => {
 
   User.findUserByCredentials(email.toLowerCase(), password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      const token = jwt.sign({ _id: user._id }, jwtKey, {
         expiresIn: "7d",
       });
 
@@ -38,7 +39,7 @@ module.exports.signup = (req, res, next) => {
     .then((hash) => {
       User.create({ email, password: hash, username })
         .then((user) => {
-          const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+          const token = jwt.sign({ _id: user._id }, jwtKey, {
             expiresIn: "7d",
           });
           res.send({
