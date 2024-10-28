@@ -2,8 +2,9 @@ const BadRequestError = require("../errors/bad-request");
 const { badRequestErrorMessage } = require("./error-messages");
 const { getTodaysDate, getDateSevenDaysAgo } = require("./getDates");
 
-module.exports.searchArticles = (req, res, next) =>
-  fetch(
+module.exports.searchArticles = (req, res, next) => {
+  console.log(process.env.NEWS_API_KEY);
+  return fetch(
     `https://nomoreparties.co/news/v2/everything?q=${
       req.params.query
     }&from=${getDateSevenDaysAgo()}&to=${getTodaysDate()}&pageSize=100
@@ -24,3 +25,4 @@ module.exports.searchArticles = (req, res, next) =>
     })
     .then((data) => res.send(data))
     .catch(next);
+};
