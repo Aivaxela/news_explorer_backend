@@ -3,7 +3,6 @@ const { badRequestErrorMessage } = require("./error-messages");
 const { getTodaysDate, getDateSevenDaysAgo } = require("./getDates");
 
 module.exports.searchArticles = (req, res, next) => {
-  console.log(process.env.NEWS_API_KEY);
   return fetch(
     `https://nomoreparties.co/news/v2/everything?q=${
       req.params.query
