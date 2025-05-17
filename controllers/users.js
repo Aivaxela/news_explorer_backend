@@ -37,7 +37,15 @@ module.exports.signup = (req, res, next) => {
   bcrypt
     .hash(password, 10)
     .then((hash) => {
-      User.create({ email, password: hash, username })
+      con
+        .query(
+          "INSERT INTO users (email, password, username) VALUES (?, ?, ?)",
+          [email, hash, username],
+          (err, result) => {
+            if (err) throw err;
+            console.log("User created successfully");
+          }
+        )
         .then((user) => {
           const token = jwt.sign({ _id: user._id }, jwtKey, {
             expiresIn: "7d",
