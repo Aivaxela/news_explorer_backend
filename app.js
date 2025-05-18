@@ -28,4 +28,4 @@ app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler, errorSender);
 
-app.listen(process.env.DB_PORT || 3002);
+app.listen(process.env.PORT || 3002);

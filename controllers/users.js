@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const pool = require("../config/database");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
@@ -32,31 +33,42 @@ module.exports.signin = (req, res, next) => {
 };
 
 module.exports.signup = (req, res, next) => {
+  console.log("signup");
   const { email, password, username } = req.body;
 
-  bcrypt
-    .hash(password, 10)
-    .then((hash) => {
-      con
-        .query(
-          "INSERT INTO users (email, password, username) VALUES (?, ?, ?)",
-          [email, hash, username],
-          (err, result) => {
-            if (err) throw err;
-            console.log("User created successfully");
-          }
-        )
-        .then((user) => {
-          const token = jwt.sign({ _id: user._id }, jwtKey, {
-            expiresIn: "7d",
-          });
-          res.send({
-            token,
-            email,
-            username,
-          });
-        })
-        .catch(next);
-    })
-    .catch(next);
+  // Test the pool
+  pool.getConnection((err, connection) => {
+    if (err) {
+      console.error("Error connecting to the database:", err);
+      return;
+    }
+    console.log("Successfully connected to database");
+    connection.release();
+  });
+
+  // bcrypt
+  //   .hash(password, 10)
+  //   .then((hash) => {
+  //     mysql
+  //       .query(
+  //         "INSERT INTO users (email, password, username) VALUES (?, ?, ?)",
+  //         [email, hash, username],
+  //         (err, result) => {
+  //           if (err) throw err;
+  //           console.log("User created successfully");
+  //         }
+  //       )
+  //       .then((user) => {
+  //         const token = jwt.sign({ _id: user._id }, jwtKey, {
+  //           expiresIn: "7d",
+  //         });
+  //         res.send({
+  //           token,
+  //           email,
+  //           username,
+  //         });
+  //       })
+  //       .catch(next);
+  //   })
+  //   .catch(next);
 };
