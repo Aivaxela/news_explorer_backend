@@ -33,42 +33,33 @@ module.exports.signin = (req, res, next) => {
 };
 
 module.exports.signup = (req, res, next) => {
-  console.log("signup");
   const { email, password, username } = req.body;
 
-  // Test the pool
-  pool.getConnection((err, connection) => {
-    if (err) {
-      console.error("Error connecting to the database:", err);
-      return;
-    }
-    console.log("Successfully connected to database");
-    connection.release();
-  });
-
-  // bcrypt
-  //   .hash(password, 10)
-  //   .then((hash) => {
-  //     mysql
-  //       .query(
-  //         "INSERT INTO users (email, password, username) VALUES (?, ?, ?)",
-  //         [email, hash, username],
-  //         (err, result) => {
-  //           if (err) throw err;
-  //           console.log("User created successfully");
-  //         }
-  //       )
-  //       .then((user) => {
-  //         const token = jwt.sign({ _id: user._id }, jwtKey, {
-  //           expiresIn: "7d",
-  //         });
-  //         res.send({
-  //           token,
-  //           email,
-  //           username,
-  //         });
-  //       })
-  //       .catch(next);
-  //   })
-  //   .catch(next);
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => {
+      pool.getConnection((err, connection) => {
+        if (err) {
+          return next(err);
+        }
+        connection.query(
+          "INSERT INTO users (email, password, username) VALUES (?, ?, ?)",
+          [email, hash, username],
+          (err, result) => {
+            console.log(result);
+            connection.release();
+            if (err) return next(err);
+            const token = jwt.sign({ _id: result.insertId }, jwtKey, {
+              expiresIn: "7d",
+            });
+            res.send({
+              token,
+              email,
+              username,
+            });
+          }
+        );
+      });
+    })
+    .catch(next);
 };
