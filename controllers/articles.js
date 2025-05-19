@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const pool = require("../config/database");
 const Article = require("../models/article");
 const ForbiddenError = require("../errors/forbidden");
 const NotFoundError = require("../errors/not-found");
@@ -26,6 +27,30 @@ module.exports.getArticles = (req, res, next) => {
 module.exports.saveArticle = (req, res, next) => {
   const { urlToImage, title, description, source, publishedAt, url, keyword } =
     req.body;
+
+  console.log(req.body);
+
+  // pool.getConnection((err, connection) => {
+  //   if (err) {
+  //     return next(err);
+  //   }
+  //   connection.query(
+  //     "INSERT INTO articles (urlToImage, title, description, source, publishedAt, url, keyword, owner) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+  //     [
+  //       urlToImage,
+  //       title,
+  //       description,
+  //       source,
+  //       publishedAt,
+  //       url,
+  //       keyword,
+  //       req.user._id,
+  //     ],
+  //     (err, result) => {
+  //       connection.release();
+  //     }
+  //   );
+  // });
 
   Article.create({
     urlToImage,

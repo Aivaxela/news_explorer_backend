@@ -8,10 +8,10 @@ const { limiter } = require("./middleware/limiter");
 const { requestLogger, errorLogger } = require("./middleware/logger");
 const { errorHandler, errorSender } = require("./middleware/error-handler");
 
-// mongoose.set("strictQuery", true);
-// mongoose.connect(
-//   process.env.DB_ADDRESS || "mongodb://127.0.0.1:27017/newsexplorer_db"
-// );
+mongoose.set("strictQuery", true);
+mongoose.connect(
+  process.env.DB_ADDRESS || "mongodb://127.0.0.1:27017/newsexplorer_db"
+);
 
 const app = express();
 

@@ -6,27 +6,62 @@ const User = require("../models/user");
 const NotFoundError = require("../errors/not-found");
 const { userNotFoundMessage } = require("../utils/error-messages");
 const jwtKey = process.env.JWT_SECRET || "jwt-secret";
+const SignInFailError = require("../errors/signin-fail");
+const { signinFailErrorMessage } = require("../utils/error-messages");
 
-module.exports.getCurrentUser = (req, res, next) =>
-  User.findById(req.user._id)
-    .orFail(() => Promise.reject(new NotFoundError(userNotFoundMessage)))
-    .then((user) => res.send({ email: user.email, username: user.username }))
-    .catch(next);
+module.exports.getCurrentUser = (req, res, next) => {
+  console.log(req.user);
+
+  // User.findById(req.user._id)
+  //   .orFail(() => Promise.reject(new NotFoundError(userNotFoundMessage)))
+  //   .then((user) => res.send({ email: user.email, username: user.username }))
+  //   .catch(next);
+};
 
 module.exports.signin = (req, res, next) => {
-  const { email, password } = req.body;
+  let { email, password } = req.body;
 
-  User.findUserByCredentials(email.toLowerCase(), password)
+  return new Promise((resolve, reject) => {
+    if (!email || !password) {
+      return reject(new Error("missing field"));
+    }
+
+    pool.getConnection((err, connection) => {
+      if (err) {
+        return reject(err);
+      }
+      connection.query(
+        "SELECT * FROM users WHERE email = ?",
+        [email.toLowerCase()],
+        (err, result) => {
+          connection.release();
+          if (err) {
+            return reject(err);
+          }
+          if (!result || !result.length) {
+            return reject(new NotFoundError(userNotFoundMessage));
+          }
+          const user = result[0];
+          bcrypt
+            .compare(password, user.password)
+            .then((matched) => {
+              if (!matched) {
+                return reject(new SignInFailError(signinFailErrorMessage));
+              }
+              resolve(user);
+            })
+            .catch(reject);
+        }
+      );
+    });
+  })
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, jwtKey, {
+      const token = jwt.sign({ _id: user.id }, jwtKey, {
         expiresIn: "7d",
       });
-
-      const id = mongoose.Types.ObjectId(user._id).toString();
       res.send({
         token,
         username: user.username,
-        id,
       });
     })
     .catch(next);
@@ -48,7 +83,9 @@ module.exports.signup = (req, res, next) => {
           (err, result) => {
             console.log(result);
             connection.release();
-            if (err) return next(err);
+            if (err) {
+              return next(err);
+            }
             const token = jwt.sign({ _id: result.insertId }, jwtKey, {
               expiresIn: "7d",
             });
